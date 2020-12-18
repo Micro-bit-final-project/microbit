@@ -26,8 +26,8 @@ bool sendAndWait(int info[]) {
   while (true) {
     uBit.sleep(100);  // Try to stay in sync with the computer
     ManagedString infoToSend("[");
-    for (int k = 0; k < 3; k++) {
-      if (k != 2)
+    for (int k = 0; k < (sizeof(info) / sizeof(info[0])); k++) {
+      if (k != ((sizeof(info) / sizeof(info[0])) - 1))
         infoToSend = infoToSend + ManagedString(info[k]) + ",";
       else
         infoToSend = infoToSend + ManagedString(info[k]) + "]";
