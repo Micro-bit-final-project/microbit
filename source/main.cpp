@@ -17,31 +17,10 @@ int main() {
   uBit.init();
 
   while (true) {
-    int info[] = {uBit.accelerometer.getX(), uBit.accelerometer.getY(),
-                  uBit.accelerometer.getZ()};
-    receive = sendAndWait(info, (sizeof(info) / sizeof(info[0])));
-
-    if (receive) {
-      ManagedString message = receiveMessage();
-      parseMessage(message);
-
-      // Print the converted message to prove it worked
-      ManagedString messageConfirmation("[");
-      for (int j = 0; j < 5; j++) {
-        if (j != 4)
-          messageConfirmation =
-              messageConfirmation + ManagedString(data[j]) + ",";
-        else
-          messageConfirmation =
-              messageConfirmation + ManagedString(data[j]) + "]";
-      }
-      serial.send(messageConfirmation);
-      uBit.sleep(100);
-
-      serial.send("Y");  // Let them know we are ready to continue
-
-      receive = false;
-    }
+    serial.clearTxBuffer();
+    uBit.accelerometer.requestUpdate(); // Request an accelerometer update to register a gesture.
+    int info[] = {uBit.accelerometer.getGesture(), 0}; // 0 needed for data parsing on PC side.
+    send(info, (sizeof(info) / sizeof(info[0])), false);
   }
 
   // If main exits, there may still be other fibers running or registered event
