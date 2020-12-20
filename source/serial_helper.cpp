@@ -1,17 +1,21 @@
-#include "MicroBit.h"
 #include "serial_helper.h"
 
-bool sendAndWait(int info[], size_t iterationSize) {
+#include "MicroBit.h"
+
+bool send(int info[], size_t iterationSize, bool wait) {
   /*
   This function sends an int array through serial
   after converting it to a ManagedString. It then
-  waits for further instruction from the computer.
+  waits for further instruction from the computer
+  if the parameter wait is true.
   If an "R" is received then the Micro:bit will
   call the receiveMessage() function and wait
   for data to come in the buffer. If an "Y" is received
   the function returns false, and receiveMessage()
   is not called.
-  - info[]: The int array to send
+  - info[]: The int array to send.
+  - iterationSize: Iterations to convert info into a ManageString.
+  - wait: Whether or not to wait for a response.
   */
   while (true) {
     uBit.sleep(100);  // Try to stay in sync with the computer
@@ -24,11 +28,15 @@ bool sendAndWait(int info[], size_t iterationSize) {
     }
     serial.send(infoToSend);
 
-    ManagedString mContinue = serial.read(1, ASYNC);
-    if (mContinue == "Y") {
+    if (wait) {
+      ManagedString mContinue = serial.read(1, ASYNC);
+      if (mContinue == "Y") {
+        return false;
+      } else if (mContinue == "R") {
+        return true;
+      }
+    } else {
       return false;
-    } else if (mContinue == "R") {
-      return true;
     }
   }
 }

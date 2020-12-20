@@ -11,7 +11,7 @@ extern uint8_t data[5];
 extern uint8_t dataIndex;
 extern int8_t tmpData;
 
-bool sendAndWait(int info[], size_t iterationSize);
+bool send(int info[], size_t iterationSize, bool wait);
 ManagedString receiveMessage();
 void parseMessage(ManagedString message);
 
