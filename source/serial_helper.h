@@ -7,9 +7,9 @@ extern MicroBitSerial serial;
 
 extern bool receive;
 
-extern uint8_t data[5];
-extern uint8_t dataIndex;
-extern int8_t tmpData;
+extern uint_fast8_t data[5];
+extern uint_fast8_t dataIndex;
+extern int_fast8_t tmpData;
 
 bool send(int info[], size_t iterationSize, bool wait);
 ManagedString receiveMessage();
