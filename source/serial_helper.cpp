@@ -29,7 +29,8 @@ bool send(int info[], size_t iterationSize, bool wait) {
     serial.send(infoToSend);
 
     if (wait) {
-      ManagedString mContinue = serial.read(1, ASYNC);
+      //ManagedString mContinue = serial.read(1, ASYNC);
+      ManagedString mContinue = serial.read(1, SYNC_SPINWAIT);
       if (mContinue == "Y") {
         return false;
       } else if (mContinue == "R") {
