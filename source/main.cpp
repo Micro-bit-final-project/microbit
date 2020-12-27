@@ -6,10 +6,11 @@
 MicroBit uBit;
 MicroBitSerial serial(USBTX, USBRX);
 
-MicroBitPin UP(MICROBIT_ID_IO_P3, MICROBIT_PIN_P3, PIN_CAPABILITY_DIGITAL_IN);
-MicroBitPin LEFT(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_DIGITAL_IN);
-MicroBitPin DOWN(MICROBIT_ID_IO_P4, MICROBIT_PIN_P4, PIN_CAPABILITY_DIGITAL_IN);
-MicroBitPin RIGHT(MICROBIT_ID_IO_P6, MICROBIT_PIN_P6, PIN_CAPABILITY_DIGITAL_IN);
+MicroBitPin UP(MICROBIT_ID_IO_P3, MICROBIT_PIN_P3, PIN_CAPABILITY_DIGITAL_IN); // Button Up
+MicroBitPin LEFT(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_DIGITAL_IN); // Button Left
+MicroBitPin DOWN(MICROBIT_ID_IO_P4, MICROBIT_PIN_P4, PIN_CAPABILITY_DIGITAL_IN); // Button Down
+MicroBitPin RIGHT(MICROBIT_ID_IO_P6, MICROBIT_PIN_P6, PIN_CAPABILITY_DIGITAL_IN); // Button Right
+MicroBitPin POT(MICROBIT_ID_IO_P1, MICROBIT_PIN_P1, PIN_CAPABILITY_ANALOG_IN); // Potentiometer
 
 
 bool receive = false;  // Whether or not to receive data from the computer
@@ -42,8 +43,10 @@ int main() {
     else if (right == LOW)
       buttonPressed = 4;
 
-    int info[] = {buttonPressed, uBit.accelerometer.getGesture()};
-    send(info, (sizeof(info) / sizeof(info[0])), false);
+    uint_fast8_t pot = POT.getAnalogValue();
+
+    int info[] = {buttonPressed, uBit.accelerometer.getGesture(), pot};
+    send(info, (sizeof(info) / sizeof(info[0])), true);
   }
 
   // If main exits, there may still be other fibers running or registered event
