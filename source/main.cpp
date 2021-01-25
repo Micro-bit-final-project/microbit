@@ -11,6 +11,7 @@ MicroBitPin LEFT(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_DIGITAL_IN);
 MicroBitPin DOWN(MICROBIT_ID_IO_P4, MICROBIT_PIN_P4, PIN_CAPABILITY_DIGITAL_IN); // Button Down
 MicroBitPin RIGHT(MICROBIT_ID_IO_P6, MICROBIT_PIN_P6, PIN_CAPABILITY_DIGITAL_IN); // Button Right
 MicroBitPin POT(MICROBIT_ID_IO_P1, MICROBIT_PIN_P1, PIN_CAPABILITY_ANALOG_IN); // Potentiometer
+MicroBitPin FAN(MICROBIT_ID_IO_P2, MICROBIT_PIN_P2, PIN_CAPABILITY_ANALOG_IN); // DC Motor fan
 
 
 bool receive = false;  // Whether or not to receive data from the computer
@@ -44,8 +45,9 @@ int main() {
       buttonPressed = 4;
 
     uint_fast8_t pot = POT.getAnalogValue();
+    uint_fast8_t fan = FAN.getAnalogValue();
 
-    int info[] = {buttonPressed, uBit.accelerometer.getGesture(), pot};
+    int info[] = {buttonPressed, uBit.accelerometer.getGesture(), pot, fan};
     send(info, (sizeof(info) / sizeof(info[0])), true);
   }
 
