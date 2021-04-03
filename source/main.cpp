@@ -1,10 +1,13 @@
 #include "MicroBit.h"
 #include "serial_helper.h"
+#include "shift_register_helper.h"
 
 #define LOW 0
 
 MicroBit uBit;
 MicroBitSerial serial(USBTX, USBRX);
+
+MicroBitEvent decrease_lives_evt(DECREASE_LIVES_ID, MICROBIT_EVT_ANY, CREATE_ONLY);
 
 MicroBitPin UP(MICROBIT_ID_IO_P3, MICROBIT_PIN_P3, PIN_CAPABILITY_DIGITAL_IN); // Button Up
 MicroBitPin LEFT(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_DIGITAL_IN); // Button Left
@@ -12,7 +15,6 @@ MicroBitPin DOWN(MICROBIT_ID_IO_P4, MICROBIT_PIN_P4, PIN_CAPABILITY_DIGITAL_IN);
 MicroBitPin RIGHT(MICROBIT_ID_IO_P6, MICROBIT_PIN_P6, PIN_CAPABILITY_DIGITAL_IN); // Button Right
 MicroBitPin POT(MICROBIT_ID_IO_P1, MICROBIT_PIN_P1, PIN_CAPABILITY_ANALOG_IN); // Potentiometer
 MicroBitPin FAN(MICROBIT_ID_IO_P2, MICROBIT_PIN_P2, PIN_CAPABILITY_ANALOG_IN); // DC Motor fan
-
 
 bool receive = false;  // Whether or not to receive data from the computer
 
@@ -25,6 +27,12 @@ int_fast8_t tmpData = -1;    // Temporary variable used to format multiple chars
 int main() {
   // Initialise the micro:bit runtime.
   uBit.init();
+
+  // Register listener
+  uBit.messageBus.listen(DECREASE_LIVES_ID, MICROBIT_EVT_ANY, decrease_lives);
+
+  // Light up all the LEDs
+  shift_register_all_leds();
 
   while (true) {
     serial.clearTxBuffer();
