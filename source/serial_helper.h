@@ -2,8 +2,11 @@
 #define SERIAL_HELPER_H
 #include "MicroBit.h"
 
+#define LIVES_DECREASE_ID 420
+
 extern MicroBit uBit;
 extern MicroBitSerial serial;
+extern MicroBitEvent lives_decrease_evt;
 
 extern bool receive;
 
