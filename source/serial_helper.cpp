@@ -1,4 +1,6 @@
+#include "shared_ubit.h"
 #include "serial_helper.h"
+#include "shift_register_helper.h"
 
 #include "MicroBit.h"
 
@@ -34,7 +36,14 @@ bool send(int info[], size_t iterationSize, bool wait) {
       if (mContinue == "Y") {
         return false;
       } else if (mContinue == "R") {
-        return true;
+        if (lives > 0) {
+          lives--;
+          decrease_lives_evt.fire();
+        } else {
+          lives = SHIFTREGISTER_BITS;
+          shift_register_all_leds();
+        }
+        return false;
       }
     } else {
       return false;
@@ -60,7 +69,7 @@ ManagedString receiveMessage() {
   // - 069
   // - 420
   ManagedString size = serial.read(3);
-  uint8_t messageLength;
+  uint8_t messageLength = 0;
   if (size.length() == 3) {
     // Convert to int
     messageLength = atoi(size.toCharArray());

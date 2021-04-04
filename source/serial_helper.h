@@ -2,7 +2,6 @@
 #define SERIAL_HELPER_H
 #include "MicroBit.h"
 
-extern MicroBit uBit;
 extern MicroBitSerial serial;
 
 extern bool receive;
