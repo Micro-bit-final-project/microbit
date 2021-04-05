@@ -35,15 +35,21 @@ bool send(int info[], size_t iterationSize, bool wait) {
       ManagedString mContinue = serial.read(1, SYNC_SPINWAIT);
       if (mContinue == "Y") {
         return false;
-      } else if (mContinue == "R") {
+      } else if (mContinue == "D") {
         if (lives > 0) {
+          // Decrease lives
           lives--;
           decrease_lives_evt.fire();
         } else {
+          // Reset lives cause 0 reached
           lives = SHIFTREGISTER_BITS;
           shift_register_all_leds();
         }
         return false;
+      } else if (mContinue == "R") {
+        // Reset lives
+        lives = SHIFTREGISTER_BITS;
+        shift_register_all_leds();
       }
     } else {
       return false;
